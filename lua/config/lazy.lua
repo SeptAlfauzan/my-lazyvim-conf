@@ -12,7 +12,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
+
 vim.opt.rtp:prepend(lazypath)
+-- Set up comment string for different file types
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    local ft = vim.bo.filetype
+    if ft == "dart" then
+      vim.bo.commentstring = "// %s"
+    end
+  end,
+})
 
 require("lazy").setup({
   spec = {
